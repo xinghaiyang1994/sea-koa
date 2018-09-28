@@ -1,7 +1,7 @@
 module.exports = {
     port: 3100,
     database: {
-        host : '',     /* ip 地址*/
+        host : 'a',     /* ip 地址*/
         user : '',
         password : '',
         database: '',        /*数据库名*/
