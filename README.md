@@ -10,6 +10,8 @@
     ```shell
     git clone https://github.com/xinghaiyang1994/sea-koa.git -b 分支名    
     
+    rm -rf .git
+
     cnpm i
     ```
 2. 配置 config/default.js
