@@ -6,9 +6,11 @@ const bodyParser = require('koa-bodyparser')
 const cors = require('koa2-cors')
 const helmet = require('koa-helmet')
 const log4js = require('log4js')
+const session = require('koa-session-minimal')
+const MysqlSession = require('koa-mysql-session')
 
 const routes = require('./routes')
-const { port } = require('./config/default')
+const { database, port } = require('./config/default')
 
 const app = new Koa()
 const logger = log4js.getLogger()
@@ -28,6 +30,14 @@ log4js.configure({
     },
     pm2: true       // 使用 pm2 启动项目
 })
+
+let store = new MysqlSession(database)
+
+// session 存入 mysql 
+app.use(session({
+    key: 'SESSION_ID',
+    store      
+}))
 
 // 模板
 app.use(views(path.join(__dirname, './views'), {

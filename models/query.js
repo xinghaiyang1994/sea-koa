@@ -20,7 +20,5 @@ module.exports = function (sql, values) {
                 })
             }
         })
-    }).catch(err => {
-        console.log(err)
     })
 }
