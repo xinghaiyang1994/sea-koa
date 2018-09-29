@@ -3,7 +3,6 @@ const views = require('koa-views')
 const path = require('path')
 const staticCache = require('koa-static-cache')
 const bodyParser = require('koa-bodyparser')
-const error = require('koa-error')
 const cors = require('koa2-cors')
 const helmet = require('koa-helmet')
 const log4js = require('log4js')
@@ -52,18 +51,33 @@ app.use(cors({
 app.use(helmet())
 
 // 错误处理
-app.use(error({
-    engine: 'ejs',
-    template: path.join(__dirname, './views/error.ejs')
-}))
+app.use(async (ctx, next) => {
+    try {
+        await next()
+    } catch (err) {
+        ctx.status = 200
+        ctx.body = {
+            'code': -1,
+            'message': err.message,
+            'data': ''
+        }
+        app.emit('error', err.message, ctx)
+    }
+})
 app.on('error', (err, ctx) => {
-    let errMsg = `${ctx.url} ${err}`
+    let errMsg = `${ctx.url} : ${err}`
     console.log(errMsg)
     logger.error(errMsg)
 })
 
 // 路由
 routes(app)
+
+// 无效 url 处理
+app.use(ctx => {
+    ctx.body = '无效的 url'
+    app.emit('error', '无效的 url', ctx)
+})
 
 app.listen(port, () => {
     console.log('http://localhost:' + port)
