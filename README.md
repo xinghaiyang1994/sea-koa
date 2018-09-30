@@ -32,4 +32,12 @@
     node index.js
     ```
 
+## api-login 数据库配置
 
+| Field        | Type             | Null | Key | Default             | Extra          |
+|-|-|-|-|-|-
+| id           | int(11) unsigned | NO   | PRI | NULL                | auto_increment |
+| name         | varchar(20)      | NO   |     |                     |                |
+| password     | varchar(32)      | NO   |     |                     |                |
+| gmt_create   | timestamp        | NO   |     | 1970-01-01 08:00:01 |                |
+| gmt_modified | timestamp        | NO   |     | 1970-01-01 08:00:01 |                |
