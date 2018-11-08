@@ -4,6 +4,8 @@
 类型：
 * couple 分支为前后端耦合项目
 * api 分支为前后端分离项目
+* api-login-session 分支为前后端分离才用 session 登录的项目
+* api-login-token 分支为前后端分离才用 token 登录的项目
 
 ## 启动步骤
 1. 下载安装依赖
