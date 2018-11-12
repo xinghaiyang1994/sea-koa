@@ -30,26 +30,13 @@ log4js.configure({
     pm2: true       // 使用 pm2 启动项目
 })
 
-// 模板
-app.use(views(path.join(__dirname, './views'), {
-    extension: 'ejs'
-}))
-
-// 静态资源
-app.use(staticCache(path.join(__dirname, './static'), { dynamic: true }))
-
-// 解析 post
-app.use(bodyParser({
-    formLimit: '1mb'
-}))
+// 提供安全 headers 
+app.use(helmet())
 
 // 支持跨域
 app.use(cors({
     'credentials': true
 }))
-
-// 提供安全 headers 
-app.use(helmet())
 
 // 错误处理
 app.use(error({
@@ -61,6 +48,19 @@ app.on('error', (err, ctx) => {
     console.log(errMsg)
     logger.error(errMsg)
 })
+
+// 静态资源
+app.use(staticCache(path.join(__dirname, './static'), { dynamic: true }))
+
+// 模板
+app.use(views(path.join(__dirname, './views'), {
+    extension: 'ejs'
+}))
+
+// 解析 post
+app.use(bodyParser({
+    formLimit: '1mb'
+}))
 
 // 路由
 routes(app)
