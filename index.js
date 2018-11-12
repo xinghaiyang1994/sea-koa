@@ -14,6 +14,7 @@ const { database, port } = require('./config/default')
 
 const app = new Koa()
 const logger = log4js.getLogger()
+let store = new MysqlSession(database)
 
 log4js.configure({
     appenders: {
@@ -31,34 +32,13 @@ log4js.configure({
     pm2: true       // 使用 pm2 启动项目
 })
 
-let store = new MysqlSession(database)
-
-// session 存入 mysql 
-app.use(session({
-    key: 'SESSION_ID',
-    store      
-}))
-
-// 模板
-app.use(views(path.join(__dirname, './views'), {
-    extension: 'ejs'
-}))
-
-// 静态资源
-app.use(staticCache(path.join(__dirname, './static'), { dynamic: true }))
-
-// 解析 post
-app.use(bodyParser({
-    formLimit: '1mb'
-}))
+// 提供安全 headers 
+app.use(helmet())
 
 // 支持跨域
 app.use(cors({
     'credentials': true
 }))
-
-// 提供安全 headers 
-app.use(helmet())
 
 // 错误处理
 app.use(async (ctx, next) => {
@@ -71,14 +51,31 @@ app.use(async (ctx, next) => {
             'message': err.message,
             'data': ''
         }
-        app.emit('error', err.message, ctx)
+        let errMsg = `${ctx.url} : ${err.message}`
+        console.log(errMsg)
+        logger.error(errMsg)
     }
 })
-app.on('error', (err, ctx) => {
-    let errMsg = `${ctx.url} : ${err}`
-    console.log(errMsg)
-    logger.error(errMsg)
-})
+
+// 静态资源
+app.use(staticCache(path.join(__dirname, './static'), { dynamic: true }))
+
+
+// session 存入 mysql 
+app.use(session({
+    key: 'SESSION_ID',
+    store      
+}))
+
+// 模板
+app.use(views(path.join(__dirname, './views'), {
+    extension: 'ejs'
+}))
+
+// 解析 post
+app.use(bodyParser({
+    formLimit: '1mb'
+}))
 
 // 路由
 routes(app)
