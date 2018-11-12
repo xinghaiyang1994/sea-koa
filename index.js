@@ -56,13 +56,13 @@ app.use(async (ctx, next) => {
     }
 })
 
+// 静态资源
+app.use(staticCache(path.join(__dirname, './static'), { dynamic: true }))
+
 // 模板
 app.use(views(path.join(__dirname, './views'), {
     extension: 'ejs'
 }))
-
-// 静态资源
-app.use(staticCache(path.join(__dirname, './static'), { dynamic: true }))
 
 // 解析 post
 app.use(bodyParser({
