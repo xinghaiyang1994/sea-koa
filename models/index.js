@@ -1,6 +1,18 @@
 const query = require('./query')
 
 module.exports = {
+    findUserByName (name) {
+        let sql = `SELECT * FROM user WHERE name = "${name}"`
+        return query(sql)
+    },
+    insertUser (value) {
+        let sql = `INSERT INTO user (name, password, gmt_create) VALUES(?, ?, ?)`
+        return query(sql, value)
+    },
+
+
+
+    
     insertData (value) {
         let sql = `INSERT INTO user (name, password) VALUES(?, ?)`
         return query(sql, value)
