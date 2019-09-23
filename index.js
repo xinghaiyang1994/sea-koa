@@ -4,6 +4,8 @@ const koa2Cors = require('koa2-cors')
 const koaHelmet = require('koa-helmet')
 const koaSession = require('koa-session')
 const koaMysqlSession = require('./utils/koa-mysql-session')
+const path = require('path')
+const koaStaticCache = require('koa-static-cache')
 
 const routes = require('./routes')
 const { logError } = require('./middlewares/log')
@@ -37,6 +39,9 @@ app.use(async (ctx, next) => {
     logError.error(errMsg)
   }
 })
+
+// 静态资源
+app.use(koaStaticCache(path.join(__dirname, './static'), { dynamic: true }))
 
 // session 存入 mysql 
 let store = new koaMysqlSession(mysqlConfig)
