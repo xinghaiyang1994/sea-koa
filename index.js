@@ -7,7 +7,7 @@ const koaMysqlSession = require('./utils/koa-mysql-session')
 
 const routes = require('./routes')
 const { logError } = require('./middlewares/log')
-const { mysqlConfig, port } = require('./config/default')
+const { mysqlConfig, port, sessionKeys } = require('./config/default')
 
 const app = new Koa()
 
@@ -40,7 +40,7 @@ app.use(async (ctx, next) => {
 
 // session 存入 mysql 
 let store = new koaMysqlSession(mysqlConfig)
-app.keys = ['some secret hurr']
+app.keys = sessionKeys
 const config = {    // 以下都为默认值
   rolling: true,
   store

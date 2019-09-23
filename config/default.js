@@ -12,7 +12,8 @@ const config = {
       database: '', // 数据库名
       charset : 'utf8mb4',
       port: 3306 // 默认端口是 3306 
-    }
+    },
+    sessionKeys: ['some sesion keys']
   },
   prod: {
     port: 3010,
@@ -24,7 +25,8 @@ const config = {
       database: '', // 数据库名
       charset : 'utf8mb4',
       port: 3306 // 默认端口是 3306 
-    }
+    },
+    sessionKeys: ['some sesion keys']
   }
 }
 
