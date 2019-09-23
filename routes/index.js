@@ -15,5 +15,4 @@ module.exports = function (app) {
 
   app.use(router.routes())
   app.use(router.allowedMethods())
-
 }

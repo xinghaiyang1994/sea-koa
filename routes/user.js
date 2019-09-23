@@ -1,8 +1,8 @@
 const Router = require('koa-router')
 const router = new Router()
 
-// 获取列表
-router.get('/list', require('../controller/user').getList)
+// 获取 passport 用户信息
+router.get('/info', require('../controller/user').getInfo)
 // 新增用户
 router.get('/add', require('../controller/user').getAdd)
 

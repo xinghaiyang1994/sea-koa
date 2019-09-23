@@ -1,22 +1,22 @@
 const { dealBody, validateForm, md5 } = require('../utils/tools')
 const { user } = require('../utils/joiSchema')
-const { findUserAll, insertUser } = require('../dao/user')
+const { checkLogin } = require('../middlewares/check')
+const { insertUser } = require('../dao/user')
 
 module.exports = {
-  // 获取列表
-  async getList(ctx) {
-    // 获取
-    const daoUserAll = await findUserAll()
-    if (!daoUserAll) {
-      throw new Error('获取列表失败！')
+  // 获取 passport 用户信息
+  async getInfo(ctx) {
+    // 检查登录
+    let loginData = checkLogin(ctx)
+    if (!loginData.status) {
+      return ctx.body = loginData.data
     }
-    const jsonUserAll = daoUserAll.toJSON()
-    jsonUserAll.forEach(el => {
-      delete el.password
-    })
-
+    
+    const { id, name, isAdmin } = ctx.session.user
     return ctx.body = dealBody({
-      data: jsonUserAll
+      data: {
+        id, name, isAdmin
+      }
     })
   },
   // 新增用户

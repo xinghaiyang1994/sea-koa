@@ -2,10 +2,14 @@ const Koa = require('koa')
 const koaBody = require('koa-body')
 const koa2Cors = require('koa2-cors')
 const koaHelmet = require('koa-helmet')
+const koaSession = require('koa-session')
+const koaRedis = require('koa-redis')
+const path = require('path')
+const koaStaticCache = require('koa-static-cache')
 
 const routes = require('./routes')
 const { logError } = require('./middlewares/log')
-const { port } = require('./config/default')
+const { port, redisSession, redisConfig, sessionKeys } = require('./config/default')
 
 const app = new Koa()
 
@@ -35,6 +39,20 @@ app.use(async (ctx, next) => {
     logError.error(errMsg)
   }
 })
+
+// 静态资源
+app.use(koaStaticCache(path.join(__dirname, './static'), { dynamic: true }))
+
+// session 存入 redis
+let store = koaRedis(redisConfig)
+app.keys = sessionKeys   // 秘钥
+const sessionConfig = {    
+  prefix: redisSession.prefix,        // redis 中 key 的前缀
+  key: redisSession.key,    // cookie 的名称。默认为 koa:sess
+  domain: redisSession.domain,
+  store
+}
+app.use(koaSession(sessionConfig, app))
 
 // 解析 post
 app.use(koaBody({

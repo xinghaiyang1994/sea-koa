@@ -1,7 +1,9 @@
 # sea-koa
 基于 koa 构建的常用脚手架。
 
-api 分支为前后端分离项目。
+mysql + redis + koa 。
+
+api-session-redis 分支接 passport 使用的模板。
 
 ## 用户表 SQL
 ```sql
