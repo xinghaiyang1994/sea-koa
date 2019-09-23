@@ -2,8 +2,8 @@ const Koa = require('koa')
 const koaBody = require('koa-body')
 const koa2Cors = require('koa2-cors')
 const koaHelmet = require('koa-helmet')
-const koaSessionMinimal = require('koa-session-minimal')
-const koaMysqlSession = require('koa-mysql-session')
+const koaSession = require('koa-session')
+const koaMysqlSession = require('./utils/koa-mysql-session')
 
 const routes = require('./routes')
 const { logError } = require('./middlewares/log')
@@ -42,10 +42,10 @@ app.use(async (ctx, next) => {
 let store = new koaMysqlSession(mysqlConfig)
 app.keys = ['some secret hurr']
 const config = {    // 以下都为默认值
-  key: 'SESSION_ID',
+  rolling: true,
   store
 }
-app.use(koaSessionMinimal(config, app))
+app.use(koaSession(config, app))
 
 // 解析 post
 app.use(koaBody({
