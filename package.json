@@ -4,7 +4,8 @@
   "description": "some koa",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "cross-env env=dev nodemon index.js",
+    "prod": "cross-env env=prod nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -17,20 +18,26 @@
   },
   "homepage": "https://github.com/xinghaiyang1994/sea-koa#readme",
   "dependencies": {
-    "ejs": "^2.6.1",
-    "koa": "^2.5.2",
-    "koa-bodyparser": "^4.2.1",
-    "koa-helmet": "^4.0.0",
-    "koa-mysql-session": "^0.0.2",
+    "bookshelf": "^1.0.0",
+    "bookshelf-camelcase": "^2.0.1",
+    "bookshelf-virtuals-plugin": "^0.1.1",
+    "ejs": "^2.7.1",
+    "joi": "^14.3.1",
+    "knex": "^0.19.4",
+    "koa": "^2.8.1",
+    "koa-body": "^4.1.1",
+    "koa-helmet": "^5.1.0",
+    "koa-mysql-session": "0.0.2",
     "koa-router": "^7.4.0",
+    "koa-session": "^5.12.3",
     "koa-session-minimal": "^3.0.4",
-    "koa-static-cache": "^5.1.2",
-    "koa-views": "^6.1.4",
     "koa2-cors": "^2.0.6",
-    "log4js": "^3.0.5",
-    "md5": "^2.2.1",
-    "moment": "^2.22.2",
-    "mysql": "^2.16.0",
-    "svg-captcha": "^1.3.11"
+    "log4js": "^5.1.0",
+    "mysql": "^2.17.1",
+    "svg-captcha": "^1.4.0"
+  },
+  "devDependencies": {
+    "cross-env": "^5.2.1",
+    "debug": "^4.1.1"
   }
 }
