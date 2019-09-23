@@ -1,19 +1,18 @@
 const Router = require('koa-router')
 
-module.exports = function (app) {
+module.exports = function(app) {
+  const router = new Router()
 
-    const router = new Router()
-    
-    router.get('/', async ctx => {
-        await ctx.render('index', {
-            content: '首页'
-        })
+  router.get('/', async ctx => {
+    await ctx.render('index', {
+      content: '首页'
     })
+  })
 
-    // 子路由
-    router.use('/home', require('./home').routes())
+  // 子路由
+  // 用户
+  router.use('/user', require('./user').routes())
 
-    app.use(router.routes())
-    app.use(router.allowedMethods())
-
+  app.use(router.routes())
+  app.use(router.allowedMethods())
 }

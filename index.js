@@ -1,70 +1,68 @@
 const Koa = require('koa')
-const views = require('koa-views')
+const koaViews = require('koa-views')
 const path = require('path')
-const staticCache = require('koa-static-cache')
-const bodyParser = require('koa-bodyparser')
-const error = require('koa-error')
-const cors = require('koa2-cors')
-const helmet = require('koa-helmet')
-const log4js = require('log4js')
+const koaStaticCache = require('koa-static-cache')
+const koaBody = require('koa-body')
+const koa2Cors = require('koa2-cors')
+const koaHelmet = require('koa-helmet')
 
 const routes = require('./routes')
+const { logError } = require('./middlewares/log')
 const { port } = require('./config/default')
 
 const app = new Koa()
-const logger = log4js.getLogger()
-
-log4js.configure({
-    appenders: {
-        error: {       // 定义了名为 error 的 appender 
-            type: 'file',
-            filename: path.join(__dirname, './log/error.log')
-        }
-    },
-    categories: {
-        default: {
-            appenders: ['error'],      // 使用名为 error 的 appender 
-            level: 'error'      
-        }
-    },
-    pm2: true       // 使用 pm2 启动项目
-})
 
 // 提供安全 headers 
-app.use(helmet())
+app.use(koaHelmet())
 
 // 支持跨域
-app.use(cors({
-    'credentials': true
+app.use(koa2Cors({
+  credentials: true
 }))
 
 // 错误处理
-app.use(error({
-    engine: 'ejs',
-    template: path.join(__dirname, './views/error.ejs')
-}))
-app.on('error', (err, ctx) => {
-    let errMsg = `${ctx.url} ${err}`
+app.use(async (ctx, next) => {
+  try {
+    await next()
+  } catch (err) {
+    ctx.status = 200
+    ctx.body = {
+      code: -1,
+      message: err.message,
+      data: ''
+    }
+
+    // 写入日志
+    let errMsg = `${ctx.url} | ${err.message}`
     console.log(errMsg)
-    logger.error(errMsg)
+    logError.error(errMsg)
+  }
 })
 
+
 // 静态资源
-app.use(staticCache(path.join(__dirname, './static'), { dynamic: true }))
+app.use(koaStaticCache(path.join(__dirname, './static'), {
+  dynamic: true
+}))
 
 // 模板
-app.use(views(path.join(__dirname, './views'), {
-    extension: 'ejs'
+app.use(koaViews(path.join(__dirname, './views'), {
+  extension: 'ejs'
 }))
 
 // 解析 post
-app.use(bodyParser({
-    formLimit: '1mb'
+app.use(koaBody({
+  multipart: true   // 开启上传文件
 }))
 
 // 路由
 routes(app)
 
+// 无效 url 处理
+app.use(() => {
+  app.emit('error', '无效的 url')
+})
+
 app.listen(port, () => {
-    console.log('http://localhost:' + port)
+  console.log('http://localhost:' + port)
 })
