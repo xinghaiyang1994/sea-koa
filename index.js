@@ -2,6 +2,8 @@ const Koa = require('koa')
 const koaBody = require('koa-body')
 const koa2Cors = require('koa2-cors')
 const koaHelmet = require('koa-helmet')
+const path = require('path')
+const koaStaticCache = require('koa-static-cache')
 
 const routes = require('./routes')
 const { logError } = require('./middlewares/log')
@@ -35,6 +37,9 @@ app.use(async (ctx, next) => {
     logError.error(errMsg)
   }
 })
+
+// 静态资源
+app.use(koaStaticCache(path.join(__dirname, './static'), { dynamic: true }))
 
 // 解析 post
 app.use(koaBody({
