@@ -1,35 +1,18 @@
 # sea-koa
 基于 koa 构建的常用脚手架。
 
-类型：
-* couple 分支为前后端耦合项目
-* api 分支为前后端分离项目
+api-login-token 分支为前后端分离用 token 登录的项目。
 
-## 启动步骤
-1. 下载安装依赖
-    ```shell
-    git clone https://github.com/xinghaiyang1994/sea-koa.git -b 分支名    
-    
-    rm -rf .git
+前端页面为 vue-login 的 api-login-token 分支。
 
-    cnpm i
-    ```
-2. 配置 config/default.js
-    ```js
-    module.exports = {
-        port: 3100,
-        database: {
-            host : '',     // ip 地址
-            user : '',
-            password : '',
-            database: '',        // 数据库名
-            port: 3306      // 默认端口是 3306 
-        }
-    }
-    ```
-3. 启动
-    ```shell
-    node index.js
-    ```
-
-
+## 用户表 SQL
+```sql
+CREATE TABLE `user` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) NOT NULL DEFAULT '' COMMENT '用户名',
+  `password` varchar(50) NOT NULL DEFAULT '' COMMENT '密码,长度为20,md5加密',
+  `gmt_create` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `gmt_modified` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+```
