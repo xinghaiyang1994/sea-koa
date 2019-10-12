@@ -19,7 +19,7 @@
   "homepage": "https://github.com/xinghaiyang1994/sea-koa#readme",
   "dependencies": {
     "bookshelf": "^1.0.0",
-    "bookshelf-camelcase": "^2.0.1",
+    "bookshelf-case-converter-plugin": "^1.0.0",
     "bookshelf-virtuals-plugin": "^0.1.1",
     "ejs": "^2.7.1",
     "joi": "^14.3.1",
